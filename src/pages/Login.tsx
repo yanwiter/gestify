@@ -70,8 +70,23 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Vídeo de fundo */}
+      <video
+        autoPlay
+        loop
+        muted
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/src/assets/videos/initial.mp4" type="video/mp4" />
+        Seu navegador não suporta vídeos HTML5.
+      </video>
+
+      {/* Overlay escuro para melhorar a legibilidade */}
+      <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+
+      {/* Conteúdo do formulário */}
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 relative z-20">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             {isLogin ? t('auth.login') : t('auth.register')}
@@ -139,18 +154,6 @@ export default function Login() {
                 <UserPlus className="h-5 w-5 mr-2" />
               )}
               {isLogin ? t('auth.login') : t('auth.register')}
-            </button>
-          </div>
-
-          <div>
-            <button
-              type="button"
-              onClick={useDemoAccount}
-              disabled={isLoading}
-              className="w-full flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <LogIn className="h-5 w-5 mr-2" />
-              {t('auth.useDemo')}
             </button>
           </div>
 
