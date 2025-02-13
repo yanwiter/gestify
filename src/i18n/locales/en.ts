@@ -85,6 +85,8 @@ export default {
     zipCode: 'ZIP Code',
     active: 'Active',
     inactive: 'Inactive',
+    selectColumns: 'Select columns',
+    actions: 'Actions',
   },
   production: {
     title: 'Production Orders',

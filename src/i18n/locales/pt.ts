@@ -85,6 +85,8 @@ export default {
     zipCode: 'CEP',
     active: 'Ativo',
     inactive: 'Inativo',
+    selectColumns: 'Selecionar colunas',
+    actions: 'Ações',
   },
   production: {
     title: 'Ordens de Produção',
