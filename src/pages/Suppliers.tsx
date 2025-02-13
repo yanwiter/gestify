@@ -461,7 +461,7 @@ export default function Suppliers() {
                     </Tab>
                   </Tab.List>
                   <Tab.Panels className="mt-2">
-                    {/* Identificação do Fornecedor */}
+                    {/* Identificação do Fornecedor */}
                     <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -511,6 +511,7 @@ export default function Suppliers() {
                         </div>
                       </div>
                     </Tab.Panel>
+
                     {/* Endereço */}
                     <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
@@ -592,28 +593,27 @@ export default function Suppliers() {
                         </div>
                       </div>
                     </Tab.Panel>
+
                     {/* Documentação */}
                     <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {typePerson === "physicalEntity"
-                                  ? t("suppliers.cnpj")
-                                  : t("suppliers.cpf")}{" "}
-                                *
-                              </label>
-                              <IMaskInput
-                                mask={mask}
-                                maskChar={null}
-                                type="text"
-                                required
-                                className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                              />
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {typePerson === "physicalEntity"
+                                ? t("suppliers.cnpj")
+                                : t("suppliers.cpf")}{" "}
+                              *
+                            </label>
+                            <IMaskInput
+                              mask={mask}
+                              maskChar={null}
+                              type="text"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                               {t("suppliers.stateRegistration")} *
                             </label>
@@ -633,13 +633,13 @@ export default function Suppliers() {
                             />
                           </div>
                         </div>
-                        
                       </div>
                     </Tab.Panel>
+
                     {/* Contato */}
                     <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                               {t("auth.email")} *
@@ -664,58 +664,156 @@ export default function Suppliers() {
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
                           </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.secondaryPhone")}
+                            </label>
+                            <input
+                              type="tel"
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.fax")}
+                            </label>
+                            <input
+                              type="tel"
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.whatsapp")} *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.contactPosition")} *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
                         </div>
                       </div>
                     </Tab.Panel>
+
                     {/* Informações Bancárias */}
                     <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                              {t("hr.status")} *
+                              {t("suppliers.paymentTerms")} *
                             </label>
-                            <select
+                            <input
+                              type="text"
                               required
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            >
-                              <option value="active">{t("hr.active")}</option>
-                              <option value="inactive">
-                                {t("hr.inactive")}
-                              </option>
-                              <option value="on_leave">
-                                {t("hr.onLeave")}
-                              </option>
-                            </select>
+                            />
                           </div>
-
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.creditLimit")} *
+                            </label>
+                            <input
+                              type="number"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.paymentDays")} *
+                            </label>
+                            <input
+                              type="number"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
                         </div>
                       </div>
                     </Tab.Panel>
+
                     {/* Outras Informações */}
                     <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                              {t("hr.status")} *
+                              {t("suppliers.deliveryTime")} *
                             </label>
-                            <select
+                            <input
+                              type="text"
                               required
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            >
-                              <option value="active">{t("hr.active")}</option>
-                              <option value="inactive">
-                                {t("hr.inactive")}
-                              </option>
-                              <option value="on_leave">
-                                {t("hr.onLeave")}
-                              </option>
-                            </select>
+                            />
                           </div>
-
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.deliveryMethod")} *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.freightCosts")} *
+                            </label>
+                            <input
+                              type="number"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.certifications")}
+                            </label>
+                            <input
+                              type="text"
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.certificationValidity")}
+                            </label>
+                            <input
+                              type="date"
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.securityPolicy")}
+                            </label>
+                            <textarea
+                              className="mt-2 block w-full rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                              rows="3"
+                            ></textarea>
+                          </div>
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("suppliers.emergencyProcedures")}
+                            </label>
+                            <textarea
+                              className="mt-2 block w-full rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                              rows="3"
+                            ></textarea>
+                          </div>
                         </div>
                       </div>
                     </Tab.Panel>
