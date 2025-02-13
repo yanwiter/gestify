@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import { SupplierModel } from "../types";
-import InputMask from "react-input-mask";
+import { IMaskInput } from 'react-imask';
 import { Tab } from "@headlessui/react";
 
 export default function Suppliers() {
@@ -278,7 +278,7 @@ export default function Suppliers() {
                               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 {t("hr.zipCode")} *
                               </label>
-                              <InputMask
+                              <IMaskInput
                                 mask="99999-999"
                                 maskChar={null}
                                 type="text"
@@ -362,7 +362,7 @@ export default function Suppliers() {
                                   : t("suppliers.cpf")}{" "}
                                 *
                               </label>
-                              <InputMask
+                              <IMaskInput
                                 mask={mask}
                                 maskChar={null}
                                 type="text"

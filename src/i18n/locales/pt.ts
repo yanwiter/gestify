@@ -26,6 +26,10 @@ export default {
     alreadyHaveAccount: 'Já tem uma conta? Entre',
     logout: 'Sair',
     useDemo: 'Usar Conta Demo',
+    invalidCredentials: 'Email ou senha inválidos',
+    generalError: 'Ocorreu um erro. Por favor, tente novamente.',
+    verificationEmailSent: 'Email de verificação enviado. Por favor, verifique sua caixa de entrada.',
+    demoAccountError: 'Não foi possível acessar a conta demo. Por favor, tente novamente mais tarde.'
   },
   dashboard: {
     totalProducts: 'Total de Produtos',

@@ -36,11 +36,13 @@ export default function Login() {
         });
         if (error) throw error;
         if (data.user) {
-          setError('Verification email sent. Please check your inbox.');
+          setError(t('auth.verificationEmailSent'));
         }
       }
     } catch (error: any) {
-      setError(error.message || 'An error occurred during authentication');
+      setError(error.message === 'Invalid login credentials' 
+        ? t('auth.invalidCredentials') 
+        : error.message || t('auth.generalError'));
     } finally {
       setIsLoading(false);
     }
@@ -49,13 +51,11 @@ export default function Login() {
   const useDemoAccount = async () => {
     setError('');
     setIsLoading(true);
-    const demoEmail = 'demo@example.com';
-    const demoPassword = 'demo123456';
-
+    
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: demoEmail,
-        password: demoPassword,
+        email: 'demo@gestify.com',
+        password: 'demo123456'
       });
       
       if (error) throw error;
@@ -63,7 +63,7 @@ export default function Login() {
         navigate('/');
       }
     } catch (error: any) {
-      setError('Demo account not available. Please contact the administrator.');
+      setError(t('auth.demoAccountError'));
     } finally {
       setIsLoading(false);
     }

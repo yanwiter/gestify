@@ -3,25 +3,48 @@ import { Bell } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Notification } from '../types';
 import { notificationService } from '../lib/notificationClient';
-import { useAuth } from '../hooks/useAuth';
 
 export function NotificationBell() {
   const { t } = useTranslation();
-  const { user } = "yanwiter@gmail.com";
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!user) return;
+  // Notificações de teste
+  const testNotifications: Notification[] = [
+    {
+      id: '1',
+      title: 'Nova mensagem',
+      message: 'Você recebeu uma nova mensagem de João.',
+      type: 'alert',
+      isRead: false,
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: '2',
+      title: 'Atualização do sistema',
+      message: 'Uma nova atualização do sistema está disponível.',
+      type: 'info',
+      isRead: true,
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: '3',
+      title: 'Aviso importante',
+      message: 'Seu pagamento foi processado com sucesso.',
+      type: 'warning',
+      isRead: false,
+      createdAt: new Date().toISOString(),
+    },
+  ];
 
+  useEffect(() => {
+    // Simula a obtenção de notificações sem depender de um usuário
     const fetchNotifications = async () => {
       try {
-        const count = await notificationService.getUnreadCount(user.id);
-        setUnreadCount(count);
-        const notifications = await notificationService.getNotifications(user.id, 5);
-        setNotifications(notifications);
+        setUnreadCount(testNotifications.filter((n) => !n.isRead).length);
+        setNotifications(testNotifications);
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
@@ -30,7 +53,7 @@ export function NotificationBell() {
     fetchNotifications();
 
     const unsubscribe = notificationService.subscribeToNotifications(
-      user.id,
+      'test-user-id',
       (notification) => {
         setNotifications((prev) => [notification, ...prev].slice(0, 5));
         setUnreadCount((prev) => prev + 1);
@@ -40,11 +63,14 @@ export function NotificationBell() {
     return () => {
       unsubscribe();
     };
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -57,9 +83,7 @@ export function NotificationBell() {
     try {
       await notificationService.markAsRead(notificationId);
       setNotifications((prev) =>
-        prev.map((n) =>
-          n.id === notificationId ? { ...n, isRead: true } : n
-        )
+        prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n))
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
     } catch (error) {
@@ -118,9 +142,7 @@ export function NotificationBell() {
                 <div
                   key={notification.id}
                   className={`p-4 border-b dark:border-gray-700 ${
-                    !notification.isRead
-                      ? 'bg-blue-50 dark:bg-blue-900/20'
-                      : ''
+                    !notification.isRead ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -156,7 +178,9 @@ export function NotificationBell() {
 
           <div className="p-4 border-t dark:border-gray-700">
             <button
-              onClick={() => {/* Navigate to notifications page */}}
+              onClick={() => {
+                /* Navigate to notifications page */
+              }}
               className="w-full text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
             >
               {t('notifications.viewAll')}
