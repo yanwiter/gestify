@@ -38,6 +38,9 @@ export default {
     monthlyRevenue: 'Receita Mensal',
     recentOrders: 'Ordens de Produção Recentes',
     lowStock: 'Alerta de Estoque Baixo',
+    activeUsers: 'Usuários Ativos',
+    totalCustomers: 'Total de Clientes',
+    totalTransactions: 'Total de Transações',
   },
   products: {
     title: 'Gestão de Produtos',

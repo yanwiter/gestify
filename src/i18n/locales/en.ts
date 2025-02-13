@@ -38,6 +38,9 @@ export default {
     monthlyRevenue: 'Monthly Revenue',
     recentOrders: 'Recent Production Orders',
     lowStock: 'Low Stock Alert',
+    activeUsers: 'Active Users',
+    totalCustomers: 'Total Customers',
+    totalTransactions: 'Total Transactions',
   },
   products: {
     title: 'Products Management',
