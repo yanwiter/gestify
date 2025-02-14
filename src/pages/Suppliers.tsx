@@ -3,13 +3,25 @@ import { useTranslation } from "react-i18next";
 import { Plus, Pencil, Trash2, X, ChevronDown, Filter } from "lucide-react";
 import { SupplierModel } from "../Models/SupplierModel";
 import { IMaskInput } from "react-imask";
-import { Tab, Menu, Transition, MenuButton, MenuItem, MenuItems, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import {
+  Tab,
+  Menu,
+  Transition,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@headlessui/react";
 
 export default function Suppliers() {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState<SupplierModel | null>(null);
+  const [selectedSupplier, setSelectedSupplier] =
+    useState<SupplierModel | null>(null);
   const [email, setEmail] = useState("");
   const [typePerson, setTypePerson] = useState("");
   const [mask, setMask] = useState("");
@@ -35,7 +47,9 @@ export default function Suppliers() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
-    setMask(typePerson === "physicalEntity" ? "99.999.999/9999-99" : "999.999.999-99");
+    setMask(
+      typePerson === "physicalEntity" ? "99.999.999/9999-99" : "999.999.999-99"
+    );
   }, [typePerson]);
 
   const handleChange = (tipo: string) => {
@@ -240,7 +254,10 @@ export default function Suppliers() {
   // Calcular os itens a serem exibidos na página atual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredSuppliers.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredSuppliers.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   // Calcular o número total de páginas
   const totalPages = Math.ceil(filteredSuppliers.length / itemsPerPage);
@@ -263,49 +280,62 @@ export default function Suppliers() {
   };
 
   // Função para alterar o número de itens por página
-  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleItemsPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1); // Resetar para a primeira página ao mudar o número de itens por página
   };
 
-  
-    const handleAddSupplier = () => {
-      setSelectedSupplier(null);
-      setShowModal(true);
-    };
-  
-    const handleEditSupplier = (supplier: unknown) => {
-      setSelectedSupplier(supplier as SupplierModel);
-      setShowModal(true);
-    };
-  
-    const handleCloseModal = () => {
-      setShowModal(false);
-      setSelectedSupplier(null);
-    };
-  
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      // Add your form submission logic here
-      handleCloseModal();
-    };
-  
-    // Função para alternar a visibilidade das colunas
-    interface VisibleColumns {
-      name: boolean;
-      cnpj: boolean;
-      email: boolean;
-      phone: boolean;
-      address: boolean;
-      actions: boolean;
-    }
-  
-    const toggleColumnVisibility = (column: keyof VisibleColumns) => {
-      setVisibleColumns((prev) => ({
-        ...prev,
-        [column]: !prev[column],
-      }));
-    };
+  const handleAddSupplier = () => {
+    setSelectedSupplier(null);
+    setShowModal(true);
+  };
+
+  const handleEditSupplier = (supplier: unknown) => {
+    setSelectedSupplier(supplier as SupplierModel);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedSupplier(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Add your form submission logic here
+    handleCloseModal();
+  };
+
+  const firstPage = () => {
+    setCurrentPage(1);
+  };
+
+  const lastPage = () => {
+    setCurrentPage(totalPages);
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // Função para alternar a visibilidade das colunas
+  interface VisibleColumns {
+    name: boolean;
+    cnpj: boolean;
+    email: boolean;
+    phone: boolean;
+    address: boolean;
+    actions: boolean;
+  }
+
+  const toggleColumnVisibility = (column: keyof VisibleColumns) => {
+    setVisibleColumns((prev) => ({
+      ...prev,
+      [column]: !prev[column],
+    }));
+  };
 
   return (
     <div className="space-y-6">
@@ -336,7 +366,11 @@ export default function Suppliers() {
                     <MenuItem key={column}>
                       {({ focus }) => (
                         <button
-                          onClick={() => toggleColumnVisibility(column as keyof VisibleColumns)}
+                          onClick={() =>
+                            toggleColumnVisibility(
+                              column as keyof VisibleColumns
+                            )
+                          }
                           className={`${
                             focus ? "bg-blue-500 text-white" : "text-gray-900"
                           } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -439,7 +473,9 @@ export default function Suppliers() {
       {/* Paginação */}
       <div className="flex justify-between items-center mt-4">
         <div className="flex items-center gap-2">
-          <span className="text-gray-700 dark:text-gray-300">{t("itemsPerPage")}</span>
+          <span className="text-gray-700 dark:text-gray-300">
+            {t("itemsPerPage")}
+          </span>
           <select
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
@@ -452,23 +488,61 @@ export default function Suppliers() {
           </select>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={prevPage}
-            disabled={currentPage === 1}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            {t("previous")}
-          </button>
-          <span className="text-gray-700 dark:text-gray-300">
-            {t("page")} {currentPage} {t("of")} {totalPages}
-          </span>
-          <button
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            {t("next")}
-          </button>
+          {currentPage !== 1 && (
+            <button
+              onClick={firstPage}
+              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              {t("first")}
+            </button>
+          )}
+          {currentPage > 1 && (
+            <button
+              onClick={prevPage}
+              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              {t("previous")}
+            </button>
+          )}
+          {Array.from({ length: totalPages }, (_, index) => {
+            const page = index + 1;
+            const isCurrentPage = page === currentPage;
+            const isWithinRange = Math.abs(page - currentPage) <= 2;
+
+            if (isWithinRange || page === 1 || page === totalPages) {
+              return (
+                <button
+                  key={page}
+                  onClick={() => goToPage(page)}
+                  disabled={isCurrentPage}
+                  className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium ${
+                    isCurrentPage
+                      ? "bg-blue-700 text-white"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+                >
+                  {page}
+                </button>
+              );
+            }
+            return null;
+          })}
+          {currentPage < totalPages && (
+            <button
+              onClick={nextPage}
+              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              {t("next")}
+            </button>
+          )}
+          {currentPage !== totalPages && (
+            <button
+              onClick={lastPage}
+              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              {t("last")}
+            </button>
+          )}
         </div>
       </div>
 
@@ -600,7 +674,9 @@ export default function Suppliers() {
                                 <input
                                   type="checkbox"
                                   checked={typePerson === "physicalEntity"}
-                                  onChange={() => handleChange("physicalEntity")}
+                                  onChange={() =>
+                                    handleChange("physicalEntity")
+                                  }
                                   className="form-checkbox h-4 w-4 border-2 border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                                 />
                                 <span className="text-gray-700 dark:text-gray-300">
@@ -629,16 +705,16 @@ export default function Suppliers() {
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {t("hr.zipCode")} *
-                              </label>
-                              <IMaskInput
-                                mask="99999-999"
-                                type="text"
-                                required
-                                className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                              />
-                            </div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("hr.zipCode")} *
+                            </label>
+                            <IMaskInput
+                              mask="99999-999"
+                              type="text"
+                              required
+                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -980,7 +1056,9 @@ export default function Suppliers() {
                       <input
                         type="text"
                         value={filters.name}
-                        onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+                        onChange={(e) =>
+                          setFilters({ ...filters, name: e.target.value })
+                        }
                         className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       />
                     </div>
@@ -991,7 +1069,9 @@ export default function Suppliers() {
                       <input
                         type="text"
                         value={filters.cnpj}
-                        onChange={(e) => setFilters({ ...filters, cnpj: e.target.value })}
+                        onChange={(e) =>
+                          setFilters({ ...filters, cnpj: e.target.value })
+                        }
                         className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       />
                     </div>
@@ -1002,7 +1082,9 @@ export default function Suppliers() {
                       <input
                         type="email"
                         value={filters.email}
-                        onChange={(e) => setFilters({ ...filters, email: e.target.value })}
+                        onChange={(e) =>
+                          setFilters({ ...filters, email: e.target.value })
+                        }
                         className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       />
                     </div>
@@ -1013,7 +1095,9 @@ export default function Suppliers() {
                       <input
                         type="tel"
                         value={filters.phone}
-                        onChange={(e) => setFilters({ ...filters, phone: e.target.value })}
+                        onChange={(e) =>
+                          setFilters({ ...filters, phone: e.target.value })
+                        }
                         className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       />
                     </div>

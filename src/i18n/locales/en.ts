@@ -2,11 +2,13 @@ export default {
   cancel: 'Cancel',
   applyFilters: 'Apply Filters',
   itemsPerPage: 'Items per page',
+  first: 'First',
+  last: 'Last',
   previous: 'Previous',
   next: 'Next',
   page: 'Page',
   of: 'of',
-  
+
   common: {
     dashboard: 'Dashboard',
     products: 'Products',
