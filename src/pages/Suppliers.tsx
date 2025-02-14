@@ -30,8 +30,6 @@ export default function Suppliers() {
     phone: "",
   });
 
- 
-
   useEffect(() => {
     setMask(typePerson === "physicalEntity" ? "99.999.999/9999-99" : "999.999.999-99");
   }, [typePerson]);

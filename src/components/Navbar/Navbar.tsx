@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, Sun, Moon, Languages, LogOut } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
@@ -16,10 +17,68 @@ export default function Navbar({ isCollapsed, setIsCollapsed }: NavbarProps) {
   const navigate = useNavigate();
   const user = "Yan Witer";
 
+  // Estado para a empresa/filial selecionada
+  const [selectedBranch, setSelectedBranch] = useState(null);
+  const [isBranchDropdownOpen, setIsBranchDropdownOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const branches = [
+    {
+      id: 1,
+      name: "Ketra Matriz",
+      image:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAYFBMVEVHcExil6wosOYrr+Uqr+Upr+Ugsepjl6+FhYREpdCIgn6EhYWEhYVSnr4pr+V6i5OEhYUlsOeGhIErr+WEhYUnsOYcsuyEhYUqr+WEhYUpr+WDhYYqr+UesuuKgXspr+Ut04QsAAAAIHRSTlMACGxjx////63///9NGOH/xol0MuCuYY5QMstgqF9gwB6OoYgAAADGSURBVHgBZdFFAoQwAATBwSG42wL//+USG6yuHQ8sx/UsfPiBEUYxXly2RKQZHvKARJqmDu4KTizTU4Wbmi0SqdSA2ueiUs4YPBeVOhg949Ck1ghlYvOBjnWWzQnIAZyUZFzYJpxWxhhw2X5QKtYVw2YM0JydsBO/ZzA2NPc9pON+hoo1k81j6/E4vPP4HkgZYwUUbC2UmHWv2WoYjIKtgDUzlqGJOWhkjXR1cdOxJrItuMtTklMdPKz3hSe8VKxJjzdnJVh/e2wVfZDG0XMAAAAASUVORK5CYII=",
+    },
+    {
+      id: 2,
+      name: "Ketra Vila Velha",
+      image:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAYFBMVEVHcExil6wosOYrr+Uqr+Upr+Ugsepjl6+FhYREpdCIgn6EhYWEhYVSnr4pr+V6i5OEhYUlsOeGhIErr+WEhYUnsOYcsuyEhYUqr+WEhYUpr+WDhYYqr+UesuuKgXspr+Ut04QsAAAAIHRSTlMACGxjx////63///9NGOH/xol0MuCuYY5QMstgqF9gwB6OoYgAAADGSURBVHgBZdFFAoQwAATBwSG42wL//+USG6yuHQ8sx/UsfPiBEUYxXly2RKQZHvKARJqmDu4KTizTU4Wbmi0SqdSA2ueiUs4YPBeVOhg949Ck1ghlYvOBjnWWzQnIAZyUZFzYJpxWxhhw2X5QKtYVw2YM0JydsBO/ZzA2NPc9pON+hoo1k81j6/E4vPP4HkgZYwUUbC2UmHWv2WoYjIKtgDUzlqGJOWhkjXR1cdOxJrItuMtTklMdPKz3hSe8VKxJjzdnJVh/e2wVfZDG0XMAAAAASUVORK5CYII=",
+    },
+    {
+      id: 3,
+      name: "Ketra Rio de Janeiro",
+      image:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAYFBMVEVHcExil6wosOYrr+Uqr+Upr+Ugsepjl6+FhYREpdCIgn6EhYWEhYVSnr4pr+V6i5OEhYUlsOeGhIErr+WEhYUnsOYcsuyEhYUqr+WEhYUpr+WDhYYqr+UesuuKgXspr+Ut04QsAAAAIHRSTlMACGxjx////63///9NGOH/xol0MuCuYY5QMstgqF9gwB6OoYgAAADGSURBVHgBZdFFAoQwAATBwSG42wL//+USG6yuHQ8sx/UsfPiBEUYxXly2RKQZHvKARJqmDu4KTizTU4Wbmi0SqdSA2ueiUs4YPBeVOhg949Ck1ghlYvOBjnWWzQnIAZyUZFzYJpxWxhhw2X5QKtYVw2YM0JydsBO/ZzA2NPc9pON+hoo1k81j6/E4vPP4HkgZYwUUbC2UmHWv2WoYjIKtgDUzlqGJOWhkjXR1cdOxJrItuMtTklMdPKz3hSe8VKxJjzdnJVh/e2wVfZDG0XMAAAAASUVORK5CYII=",
+    },
+    {
+      id: 4,
+      name: "Ketra São Paulo",
+      image:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAYFBMVEVHcExil6wosOYrr+Uqr+Upr+Ugsepjl6+FhYREpdCIgn6EhYWEhYVSnr4pr+V6i5OEhYUlsOeGhIErr+WEhYUnsOYcsuyEhYUqr+WEhYUpr+WDhYYqr+UesuuKgXspr+Ut04QsAAAAIHRSTlMACGxjx////63///9NGOH/xol0MuCuYY5QMstgqF9gwB6OoYgAAADGSURBVHgBZdFFAoQwAATBwSG42wL//+USG6yuHQ8sx/UsfPiBEUYxXly2RKQZHvKARJqmDu4KTizTU4Wbmi0SqdSA2ueiUs4YPBeVOhg949Ck1ghlYvOBjnWWzQnIAZyUZFzYJpxWxhhw2X5QKtYVw2YM0JydsBO/ZzA2NPc9pON+hoo1k81j6/E4vPP4HkgZYwUUbC2UmHWv2WoYjIKtgDUzlqGJOWhkjXR1cdOxJrItuMtTklMdPKz3hSe8VKxJjzdnJVh/e2wVfZDG0XMAAAAASUVORK5CYII=",
+    },
+    {
+      id: 5,
+      name: "Ketra Macapá",
+      image:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAYFBMVEVHcExil6wosOYrr+Uqr+Upr+Ugsepjl6+FhYREpdCIgn6EhYWEhYVSnr4pr+V6i5OEhYUlsOeGhIErr+WEhYUnsOYcsuyEhYUqr+WEhYUpr+WDhYYqr+UesuuKgXspr+Ut04QsAAAAIHRSTlMACGxjx////63///9NGOH/xol0MuCuYY5QMstgqF9gwB6OoYgAAADGSURBVHgBZdFFAoQwAATBwSG42wL//+USG6yuHQ8sx/UsfPiBEUYxXly2RKQZHvKARJqmDu4KTizTU4Wbmi0SqdSA2ueiUs4YPBeVOhg949Ck1ghlYvOBjnWWzQnIAZyUZFzYJpxWxhhw2X5QKtYVw2YM0JydsBO/ZzA2NPc9pON+hoo1k81j6/E4vPP4HkgZYwUUbC2UmHWv2WoYjIKtgDUzlqGJOWhkjXR1cdOxJrItuMtTklMdPKz3hSe8VKxJjzdnJVh/e2wVfZDG0XMAAAAASUVORK5CYII=",
+    },
+  ];
+
+  // Função para selecionar uma empresa/filial
+  const handleBranchSelect = (branch) => {
+    setSelectedBranch(branch);
+    setIsBranchDropdownOpen(false);
+  };
+
+  // Função para mudar a página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Filtrar as empresas/filiais para a paginação
+  const paginatedBranches = branches.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Função para trocar o idioma
   const changeLanguage = () => {
     i18n.changeLanguage(i18n.language === "en" ? "pt" : "en");
   };
 
+  // Função para fazer logout
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -29,6 +88,12 @@ export default function Navbar({ isCollapsed, setIsCollapsed }: NavbarProps) {
       console.error("Error logging out:", error);
     }
   };
+
+  useEffect(() => {
+    if (branches.length > 0 && !selectedBranch) {
+      setSelectedBranch(branches[0]);
+    }
+  }, [branches, selectedBranch]);
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm">
@@ -45,6 +110,71 @@ export default function Navbar({ isCollapsed, setIsCollapsed }: NavbarProps) {
               ? `${t("common.greeting")}, ${user || "Usuário"}!`
               : t("common.greeting")}
           </span>
+
+          {/* Dropdown de seleção de empresa/filial */}
+          <div className="relative group">
+            <button
+              onClick={() => setIsBranchDropdownOpen(!isBranchDropdownOpen)}
+              className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              {selectedBranch ? (
+                <>
+                  <img
+                    src={selectedBranch.image}
+                    alt={selectedBranch.name}
+                    className="w-6 h-6 rounded-full"
+                  />
+                  <span className="text-sm font-medium dark:text-white">
+                    {selectedBranch.name}
+                  </span>
+                </>
+              ) : (
+                <span className="text-sm font-medium dark:text-white">
+                  {t("common.selectBranch")}
+                </span>
+              )}
+            </button>
+            {isBranchDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50">
+                <div className="max-h-60 overflow-y-auto">
+                  {paginatedBranches.map((branch) => (
+                    <button
+                      key={branch.id}
+                      onClick={() => handleBranchSelect(branch)}
+                      className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                    >
+                      <img
+                        src={branch.image}
+                        alt={branch.name}
+                        className="w-6 h-6 rounded-full"
+                      />
+                      <span>{branch.name}</span>
+                    </button>
+                  ))}
+                </div>
+                <div className="flex justify-between items-center px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
+                  >
+                    {"<"}
+                  </button>
+                  <span className="text-sm text-gray-700 dark:text-gray-200">
+                    Página {currentPage}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage * itemsPerPage >= branches.length}
+                    className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
+                  >
+                    {">"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <button
             onClick={changeLanguage}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -67,7 +197,7 @@ export default function Navbar({ isCollapsed, setIsCollapsed }: NavbarProps) {
           <div className="relative group">
             <button className="flex items-center gap-2">
               <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="https://media.licdn.com/dms/image/v2/D4D03AQGOcvJl1IJLpg/profile-displayphoto-shrink_400_400/B4DZSzhRQjHYAg-/0/1738178631183?e=1744848000&v=beta&t=N6M0_jSItsRDBZuA8-GIBu7RsUQvWNu7J7y6NuF-mf8"
                 alt="User"
                 className="w-8 h-8 rounded-full"
               />
