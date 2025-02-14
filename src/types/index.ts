@@ -10,14 +10,7 @@ export interface Product {
   manufacturingDate: string;
 }
 
-export interface Supplier {
-  id: string;
-  name: string;
-  cnpj: string;
-  email: string;
-  phone: string;
-  address: string;
-}
+
 
 export interface PurchaseOrder {
   id: string;

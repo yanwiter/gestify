@@ -1,9 +1,9 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Pencil, Trash2, X, ChevronDown } from "lucide-react";
-import { SupplierModel } from "../types";
+import { SupplierModel } from "../Models/SupplierModel";
 import { IMaskInput } from "react-imask";
-import { Tab, Menu, Transition } from "@headlessui/react";
+import { Tab, Menu, Transition, MenuButton, MenuItem, MenuItems, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 
 export default function Suppliers() {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ export default function Suppliers() {
     setMask(typePerson === "physicalEntity" ? "99.999.999/9999-99" : "999.999.999-99");
   }, [typePerson]);
 
-  const handleChange = (tipo) => {
+  const handleChange = (tipo: string) => {
     setTypePerson(tipo === typePerson ? "" : tipo);
   };
 
@@ -214,8 +214,8 @@ export default function Suppliers() {
     setShowModal(true);
   };
 
-  const handleEditSupplier = (supplier: any) => {
-    setSelectedSupplier(supplier);
+  const handleEditSupplier = (supplier: unknown) => {
+    setSelectedSupplier(supplier as SupplierModel);
     setShowModal(true);
   };
 
@@ -231,7 +231,16 @@ export default function Suppliers() {
   };
 
   // Função para alternar a visibilidade das colunas
-  const toggleColumnVisibility = (column) => {
+  interface VisibleColumns {
+    name: boolean;
+    cnpj: boolean;
+    email: boolean;
+    phone: boolean;
+    address: boolean;
+    actions: boolean;
+  }
+
+  const toggleColumnVisibility = (column: keyof VisibleColumns) => {
     setVisibleColumns((prev) => ({
       ...prev,
       [column]: !prev[column],
@@ -247,10 +256,10 @@ export default function Suppliers() {
         <div className="flex gap-2">
           <Menu as="div" className="relative inline-block text-left">
             <div>
-              <Menu.Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <MenuButton className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
                 {t("suppliers.selectColumns")}
                 <ChevronDown className="w-4 h-4" />
-              </Menu.Button>
+              </MenuButton>
             </div>
             <Transition
               as={Fragment}
@@ -261,27 +270,27 @@ export default function Suppliers() {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1">
                   {Object.keys(visibleColumns).map((column) => (
-                    <Menu.Item key={column}>
-                      {({ active }) => (
+                    <MenuItem key={column}>
+                      {({ focus }) => (
                         <button
-                          onClick={() => toggleColumnVisibility(column)}
+                          onClick={() => toggleColumnVisibility(column as keyof VisibleColumns)}
                           className={`${
-                            active ? "bg-blue-500 text-white" : "text-gray-900"
+                            focus ? "bg-blue-500 text-white" : "text-gray-900"
                           } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                         >
                           {t(`suppliers.${column}`)}
-                          {visibleColumns[column] && (
+                          {visibleColumns[column as keyof VisibleColumns] && (
                             <span className="ml-2">✓</span>
                           )}
                         </button>
                       )}
-                    </Menu.Item>
+                    </MenuItem>
                   ))}
                 </div>
-              </Menu.Items>
+              </MenuItems>
             </Transition>
           </Menu>
           <button
@@ -379,8 +388,8 @@ export default function Suppliers() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                <Tab.Group>
-                  <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+                <TabGroup>
+                  <TabList className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
                     <Tab
                       className={({ selected }) =>
                         `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700
@@ -459,10 +468,10 @@ export default function Suppliers() {
                     >
                       {t("suppliers.otherInformation")}
                     </Tab>
-                  </Tab.List>
-                  <Tab.Panels className="mt-2">
+                  </TabList>
+                  <TabPanels className="mt-2">
                     {/* Identificação do Fornecedor */}
-                    <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -510,10 +519,10 @@ export default function Suppliers() {
                           </div>
                         </div>
                       </div>
-                    </Tab.Panel>
+                    </TabPanel>
 
                     {/* Endereço */}
-                    <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -522,7 +531,6 @@ export default function Suppliers() {
                               </label>
                               <IMaskInput
                                 mask="99999-999"
-                                maskChar={null}
                                 type="text"
                                 required
                                 className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -592,10 +600,10 @@ export default function Suppliers() {
                           </div>
                         </div>
                       </div>
-                    </Tab.Panel>
+                    </TabPanel>
 
                     {/* Documentação */}
-                    <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -607,7 +615,6 @@ export default function Suppliers() {
                             </label>
                             <IMaskInput
                               mask={mask}
-                              maskChar={null}
                               type="text"
                               required
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -634,10 +641,10 @@ export default function Suppliers() {
                           </div>
                         </div>
                       </div>
-                    </Tab.Panel>
+                    </TabPanel>
 
                     {/* Contato */}
-                    <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -704,10 +711,10 @@ export default function Suppliers() {
                           </div>
                         </div>
                       </div>
-                    </Tab.Panel>
+                    </TabPanel>
 
                     {/* Informações Bancárias */}
-                    <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -742,10 +749,10 @@ export default function Suppliers() {
                           </div>
                         </div>
                       </div>
-                    </Tab.Panel>
+                    </TabPanel>
 
                     {/* Outras Informações */}
-                    <Tab.Panel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -802,7 +809,7 @@ export default function Suppliers() {
                             </label>
                             <textarea
                               className="mt-2 block w-full rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                              rows="3"
+                              rows={3}
                             ></textarea>
                           </div>
                           <div className="md:col-span-2">
@@ -811,14 +818,14 @@ export default function Suppliers() {
                             </label>
                             <textarea
                               className="mt-2 block w-full rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                              rows="3"
+                              rows={3}
                             ></textarea>
                           </div>
                         </div>
                       </div>
-                    </Tab.Panel>
-                  </Tab.Panels>
-                </Tab.Group>
+                    </TabPanel>
+                  </TabPanels>
+                </TabGroup>
 
                 <div className="flex justify-end gap-4">
                   <button
