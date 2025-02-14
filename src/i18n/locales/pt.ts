@@ -1,6 +1,11 @@
 export default {
   cancel: 'Cancelar',
   applyFilters: 'Aplicar Filtros',
+  itemsPerPage: 'Itens por página',
+  previous: 'Anterior',
+  next: 'Próximo',
+  page: 'Página',
+  of: 'de',
   common: {
     dashboard: 'Painel',
     products: 'Produtos',

@@ -30,6 +30,10 @@ export default function Suppliers() {
     phone: "",
   });
 
+  // Estados para paginação
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   useEffect(() => {
     setMask(typePerson === "physicalEntity" ? "99.999.999/9999-99" : "999.999.999-99");
   }, [typePerson]);
@@ -233,43 +237,75 @@ export default function Suppliers() {
 
   const [filteredSuppliers, setFilteredSuppliers] = useState(suppliers);
 
-  const handleAddSupplier = () => {
-    setSelectedSupplier(null);
-    setShowModal(true);
+  // Calcular os itens a serem exibidos na página atual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredSuppliers.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calcular o número total de páginas
+  const totalPages = Math.ceil(filteredSuppliers.length / itemsPerPage);
+
+  // Função para mudar de página
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Função para ir para a próxima página
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
-  const handleEditSupplier = (supplier: unknown) => {
-    setSelectedSupplier(supplier as SupplierModel);
-    setShowModal(true);
+  // Função para voltar para a página anterior
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedSupplier(null);
+  // Função para alterar o número de itens por página
+  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1); // Resetar para a primeira página ao mudar o número de itens por página
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Add your form submission logic here
-    handleCloseModal();
-  };
-
-  // Função para alternar a visibilidade das colunas
-  interface VisibleColumns {
-    name: boolean;
-    cnpj: boolean;
-    email: boolean;
-    phone: boolean;
-    address: boolean;
-    actions: boolean;
-  }
-
-  const toggleColumnVisibility = (column: keyof VisibleColumns) => {
-    setVisibleColumns((prev) => ({
-      ...prev,
-      [column]: !prev[column],
-    }));
-  };
+  
+    const handleAddSupplier = () => {
+      setSelectedSupplier(null);
+      setShowModal(true);
+    };
+  
+    const handleEditSupplier = (supplier: unknown) => {
+      setSelectedSupplier(supplier as SupplierModel);
+      setShowModal(true);
+    };
+  
+    const handleCloseModal = () => {
+      setShowModal(false);
+      setSelectedSupplier(null);
+    };
+  
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      // Add your form submission logic here
+      handleCloseModal();
+    };
+  
+    // Função para alternar a visibilidade das colunas
+    interface VisibleColumns {
+      name: boolean;
+      cnpj: boolean;
+      email: boolean;
+      phone: boolean;
+      address: boolean;
+      actions: boolean;
+    }
+  
+    const toggleColumnVisibility = (column: keyof VisibleColumns) => {
+      setVisibleColumns((prev) => ({
+        ...prev,
+        [column]: !prev[column],
+      }));
+    };
 
   return (
     <div className="space-y-6">
@@ -356,12 +392,12 @@ export default function Suppliers() {
                   <th className="text-left p-4">{t("suppliers.address")}</th>
                 )}
                 {visibleColumns.actions && (
-                <th className="text-left p-4">{t("products.actions")}</th>
+                  <th className="text-left p-4">{t("products.actions")}</th>
                 )}
               </tr>
             </thead>
             <tbody>
-              {suppliers.map((supplier) => (
+              {currentItems.map((supplier) => (
                 <tr key={supplier.id} className="border-b dark:border-gray-700">
                   {visibleColumns.name && (
                     <td className="p-4 dark:text-white">{supplier.name}</td>
@@ -379,19 +415,19 @@ export default function Suppliers() {
                     <td className="p-4 dark:text-white">{supplier.address}</td>
                   )}
                   {visibleColumns.actions && (
-                  <td className="p-4">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleEditSupplier(supplier)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+                    <td className="p-4">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleEditSupplier(supplier)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
                   )}
                 </tr>
               ))}
@@ -400,6 +436,43 @@ export default function Suppliers() {
         </div>
       </div>
 
+      {/* Paginação */}
+      <div className="flex justify-between items-center mt-4">
+        <div className="flex items-center gap-2">
+          <span className="text-gray-700 dark:text-gray-300">{t("itemsPerPage")}</span>
+          <select
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            className="border border-gray-300 rounded-md p-1"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={prevPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            {t("previous")}
+          </button>
+          <span className="text-gray-700 dark:text-gray-300">
+            {t("page")} {currentPage} {t("of")} {totalPages}
+          </span>
+          <button
+            onClick={nextPage}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            {t("next")}
+          </button>
+        </div>
+      </div>
+
+      {/* Modal de adicionar/editar fornecedor */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
@@ -417,7 +490,6 @@ export default function Suppliers() {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-
               <form onSubmit={handleSubmit} className="space-y-6">
                 <TabGroup>
                   <TabList className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
@@ -881,7 +953,8 @@ export default function Suppliers() {
         </div>
       )}
 
-{showFilterModal && (
+      {/* Modal de filtro */}
+      {showFilterModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
