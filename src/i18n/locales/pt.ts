@@ -8,7 +8,7 @@ export default {
   next: 'Próximo',
   page: 'Página',
   of: 'de',
-  
+
   common: {
     dashboard: 'Painel',
     products: 'Produtos',
@@ -111,6 +111,8 @@ export default {
     actions: 'Ações',
     filter: 'Filtro',
     filterSuppliers: 'Filtrar Fornecedores',
+    removeAll: 'Remover Todos',
+    includeAll: 'Incluir Todos',
   },
   production: {
     title: 'Ordens de Produção',

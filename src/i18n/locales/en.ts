@@ -111,6 +111,8 @@ export default {
     actions: 'Actions',
     filter: 'Filter',
     filterSuppliers: 'Filter Suppliers',
+    removeAll: 'Remove All',
+    includeAll: 'Include All',
   },
   production: {
     title: 'Production Orders',
