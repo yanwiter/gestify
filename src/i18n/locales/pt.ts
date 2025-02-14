@@ -1,5 +1,6 @@
 export default {
   cancel: 'Cancelar',
+  applyFilters: 'Aplicar Filtros',
   common: {
     dashboard: 'Painel',
     products: 'Produtos',
@@ -100,7 +101,8 @@ export default {
     inactive: 'Inativo',
     selectColumns: 'Selecionar colunas',
     actions: 'Ações',
-
+    filter: 'Filtro',
+    filterSuppliers: 'Filtrar Fornecedores',
   },
   production: {
     title: 'Ordens de Produção',

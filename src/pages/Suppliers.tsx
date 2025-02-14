@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Pencil, Trash2, X, ChevronDown } from "lucide-react";
+import { Plus, Pencil, Trash2, X, ChevronDown, Filter } from "lucide-react";
 import { SupplierModel } from "../Models/SupplierModel";
 import { IMaskInput } from "react-imask";
 import { Tab, Menu, Transition, MenuButton, MenuItem, MenuItems, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
@@ -8,6 +8,7 @@ import { Tab, Menu, Transition, MenuButton, MenuItem, MenuItems, TabGroup, TabLi
 export default function Suppliers() {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<SupplierModel | null>(null);
   const [email, setEmail] = useState("");
   const [typePerson, setTypePerson] = useState("");
@@ -22,12 +23,35 @@ export default function Suppliers() {
     actions: true,
   });
 
+  const [filters, setFilters] = useState({
+    name: "",
+    cnpj: "",
+    email: "",
+    phone: "",
+  });
+
+ 
+
   useEffect(() => {
     setMask(typePerson === "physicalEntity" ? "99.999.999/9999-99" : "999.999.999-99");
   }, [typePerson]);
 
   const handleChange = (tipo: string) => {
     setTypePerson(tipo === typePerson ? "" : tipo);
+  };
+
+  const handleFilterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const filtered = suppliers.filter((supplier) => {
+      return (
+        supplier.name.toLowerCase().includes(filters.name.toLowerCase()) &&
+        supplier.cnpj.includes(filters.cnpj) &&
+        supplier.email.toLowerCase().includes(filters.email.toLowerCase()) &&
+        supplier.phone.includes(filters.phone)
+      );
+    });
+    setFilteredSuppliers(filtered);
+    setShowFilterModal(false);
   };
 
   const suppliers = [
@@ -209,6 +233,8 @@ export default function Suppliers() {
     },
   ];
 
+  const [filteredSuppliers, setFilteredSuppliers] = useState(suppliers);
+
   const handleAddSupplier = () => {
     setSelectedSupplier(null);
     setShowModal(true);
@@ -293,6 +319,13 @@ export default function Suppliers() {
               </MenuItems>
             </Transition>
           </Menu>
+          <button
+            onClick={() => setShowFilterModal(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <Filter className="w-4 h-4" />
+            {t("suppliers.filter")}
+          </button>
           <button
             onClick={handleAddSupplier}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
@@ -842,6 +875,93 @@ export default function Suppliers() {
                     {selectedSupplier
                       ? t("suppliers.editSupplier")
                       : t("suppliers.addSupplier")}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+{showFilterModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+                  {t("suppliers.filterSuppliers")}
+                </h2>
+                <button
+                  onClick={() => setShowFilterModal(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <form onSubmit={handleFilterSubmit}>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t("suppliers.name")}
+                      </label>
+                      <input
+                        type="text"
+                        value={filters.name}
+                        onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+                        className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t("suppliers.cnpj")}
+                      </label>
+                      <input
+                        type="text"
+                        value={filters.cnpj}
+                        onChange={(e) => setFilters({ ...filters, cnpj: e.target.value })}
+                        className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t("suppliers.email")}
+                      </label>
+                      <input
+                        type="email"
+                        value={filters.email}
+                        onChange={(e) => setFilters({ ...filters, email: e.target.value })}
+                        className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t("suppliers.phone")}
+                      </label>
+                      <input
+                        type="tel"
+                        value={filters.phone}
+                        onChange={(e) => setFilters({ ...filters, phone: e.target.value })}
+                        className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-4 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setShowFilterModal(false)}
+                    className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
+                  >
+                    {t("cancel")}
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    {t("applyFilters")}
                   </button>
                 </div>
               </form>

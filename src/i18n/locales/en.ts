@@ -1,5 +1,6 @@
 export default {
   cancel: 'Cancel',
+  applyFilters: 'Apply Filters',
   common: {
     dashboard: 'Dashboard',
     products: 'Products',
@@ -100,6 +101,8 @@ export default {
     inactive: 'Inactive',
     selectColumns: 'Select columns',
     actions: 'Actions',
+    filter: 'Filter',
+    filterSuppliers: 'Filter Suppliers',
   },
   production: {
     title: 'Production Orders',
