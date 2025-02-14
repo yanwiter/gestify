@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Bell } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Notification } from '../types';
@@ -20,14 +20,12 @@ export function NotificationBell() {
       type: 'alert',
       isRead: false,
       createdAt: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      title: 'Atualização do sistema',
-      message: 'Uma nova atualização do sistema está disponível.',
-      type: 'info',
-      isRead: true,
-      createdAt: new Date().toISOString(),
+      userId: 'test-user-id',
+      priority: 'high',
+      isEncrypted: false,
+      category: 'payment',
+      expiresAt: '',
+      updatedAt: ''
     },
     {
       id: '3',
@@ -36,6 +34,12 @@ export function NotificationBell() {
       type: 'warning',
       isRead: false,
       createdAt: new Date().toISOString(),
+      userId: '',
+      priority: 'high',
+      isEncrypted: false,
+      category: '',
+      expiresAt: '',
+      updatedAt: ''
     },
   ];
 

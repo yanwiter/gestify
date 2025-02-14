@@ -20,8 +20,8 @@ import {
 } from "lucide-react";
 
 interface SidebarProps {
-  isCollapsed: boolean;
-  setIsCollapsed: (value: boolean) => void;
+  readonly isCollapsed: boolean;
+  readonly setIsCollapsed: (value: boolean) => void;
 }
 
 export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {

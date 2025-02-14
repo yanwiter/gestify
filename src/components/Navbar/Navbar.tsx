@@ -1,4 +1,3 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, Sun, Moon, Languages, LogOut } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
@@ -7,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { NotificationBell } from "../NotificationBell";
 
 interface NavbarProps {
-  isCollapsed: boolean;
-  setIsCollapsed: (value: boolean) => void;
+  readonly isCollapsed: boolean;
+  readonly setIsCollapsed: (value: boolean) => void;
 }
 
 export default function Navbar({ isCollapsed, setIsCollapsed }: NavbarProps) {
