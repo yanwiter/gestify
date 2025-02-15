@@ -15,6 +15,7 @@ import {
   TabPanel,
   TabPanels,
 } from "@headlessui/react";
+import { fetchAddressByCEP } from "../Utils/utils";
 
 interface VisibleColumns {
   name: boolean;
@@ -53,6 +54,13 @@ export default function Suppliers() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const [addressFields, setAddressFields] = useState({
+    street: "",
+    neighborhood: "",
+    city: "",
+    state: "",
+  });
 
   useEffect(() => {
     setMask(
@@ -299,6 +307,12 @@ export default function Suppliers() {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedSupplier(null);
+    setAddressFields({
+      street: "",
+      neighborhood: "",
+      city: "",
+      state: "",
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -327,6 +341,13 @@ export default function Suppliers() {
       ...prev,
       [column]: value ?? !prev[column],
     }));
+  };
+
+  const handleCepBlur = async (cep: string) => {
+    const address = await fetchAddressByCEP(cep.replace(/\D/g, ""));
+    if (address) {
+      setAddressFields(address);
+    }
   };
 
   return (
@@ -736,9 +757,10 @@ export default function Suppliers() {
                               {t("hr.zipCode")} *
                             </label>
                             <IMaskInput
-                              mask="99999-999"
+
                               type="text"
                               required
+                              onBlur={(e) => handleCepBlur(e.target.value)}
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
                           </div>
@@ -751,6 +773,13 @@ export default function Suppliers() {
                             </label>
                             <input
                               type="text"
+                              value={addressFields.street}
+                              onChange={(e) =>
+                                setAddressFields({
+                                  ...addressFields,
+                                  street: e.target.value,
+                                })
+                              }
                               required
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
@@ -762,7 +791,7 @@ export default function Suppliers() {
                             <input
                               type="text"
                               required
-                              className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                              className="mt-2 block w-48 h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
                           </div>
                           <div>
@@ -780,6 +809,13 @@ export default function Suppliers() {
                             </label>
                             <input
                               type="text"
+                              value={addressFields.neighborhood}
+                              onChange={(e) =>
+                                setAddressFields({
+                                  ...addressFields,
+                                  neighborhood: e.target.value,
+                                })
+                              }
                               required
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
@@ -790,6 +826,13 @@ export default function Suppliers() {
                             </label>
                             <input
                               type="text"
+                              value={addressFields.city}
+                              onChange={(e) =>
+                                setAddressFields({
+                                  ...addressFields,
+                                  city: e.target.value,
+                                })
+                              }
                               required
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
@@ -800,6 +843,13 @@ export default function Suppliers() {
                             </label>
                             <input
                               type="text"
+                              value={addressFields.state}
+                              onChange={(e) =>
+                                setAddressFields({
+                                  ...addressFields,
+                                  state: e.target.value,
+                                })
+                              }
                               required
                               className="mt-2 block w-full h-8 rounded-md border-2 border-gray-400 bg-white shadow-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
@@ -815,8 +865,8 @@ export default function Suppliers() {
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                               {typePerson === "physicalEntity"
-                                ? t("suppliers.cnpj")
-                                : t("suppliers.cpf")}{" "}
+                                ? t("suppliers.cpf")
+                                : t("suppliers.cnpj")}{" "}
                               *
                             </label>
                             <IMaskInput
