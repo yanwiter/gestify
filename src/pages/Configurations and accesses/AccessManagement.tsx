@@ -22,10 +22,26 @@ const acessData = [
   {
     id: "1",
     name: "Yan Witer Rocha Barbosa",
-    email: "contact@sugarsupply.com",
+    email: "yan@sugarsupply.com",
     phone: "(11) 1234-5678",
     situation: "12.345.678/0001-90",
     mfaStatus: "Ativo",
+  },
+  {
+    id: "2",
+    name: "Yuri Witer Rocha Barbosa",
+    email: "yuri@sugarsupply.com",
+    phone: "(11) 1234-5678",
+    situation: "12.345.678/0001-90",
+    mfaStatus: "Inativo",
+  },
+  {
+    id: "3",
+    name: "Ygor Witer Rocha Barbosa",
+    email: "ygor@sugarsupply.com",
+    phone: "(11) 1234-5678",
+    situation: "12.345.678/0001-90",
+    mfaStatus: "Enviado",
   },
 ];
 
@@ -113,6 +129,19 @@ export default function AccessManagement() {
       [column]: value ?? !prev[column],
     }));
   };
+
+const getStatusBadgeClass = (status: string) => {
+  switch (status) {
+    case "Ativo":
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+    case "Inativo":
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+    case "Enviado":
+      return "bg-orange-100 text-orange-600 dark:bg-orange-600 dark:text-white";
+    default:
+      return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
+  }
+};
 
   return (
     <div className="space-y-6">
@@ -259,7 +288,13 @@ export default function AccessManagement() {
                   )}
                   {visibleColumns.mfaStatus && (
                     <td className="p-4 dark:text-white">
-                      {supplier.mfaStatus}
+                      <span
+                        className={`px-2 py-1 rounded-full text-sm ${getStatusBadgeClass(
+                          supplier.mfaStatus
+                        )}`}
+                      >
+                        {supplier.mfaStatus}
+                      </span>
                     </td>
                   )}
                   {visibleColumns.actions && (
