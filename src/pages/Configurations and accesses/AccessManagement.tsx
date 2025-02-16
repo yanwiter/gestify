@@ -1,6 +1,14 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Pencil, Trash2, X, ChevronDown, Filter, RefreshCcwDot } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  X,
+  ChevronDown,
+  Filter,
+  RefreshCcwDot,
+} from "lucide-react";
 import {
   Menu,
   Transition,
@@ -130,18 +138,18 @@ export default function AccessManagement() {
     }));
   };
 
-const getStatusBadgeClass = (status: string) => {
-  switch (status) {
-    case "Ativo":
-      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
-    case "Inativo":
-      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
-    case "Enviado":
-      return "bg-orange-100 text-orange-600 dark:bg-orange-600 dark:text-white";
-    default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
-  }
-};
+  const getStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case "Ativo":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+      case "Inativo":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+      case "Enviado":
+        return "bg-orange-100 text-orange-600 dark:bg-orange-600 dark:text-white";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
+    }
+  };
 
   return (
     <div className="space-y-6">
