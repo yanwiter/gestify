@@ -8,6 +8,10 @@ export default {
   next: 'Next',
   page: 'Page',
   of: 'of',
+  name: 'Name',
+  category: 'Category',
+  situation: 'Situation',
+  status: 'Status',
 
   common: {
     dashboard: 'Dashboard',
@@ -113,6 +117,8 @@ export default {
     filterSuppliers: 'Filter Suppliers',
     removeAll: 'Remove All',
     includeAll: 'Include All',
+    situation: 'Situation',
+    mfaStatus: 'MFA Status',
   },
   production: {
     title: 'Production Orders',
@@ -204,5 +210,14 @@ export default {
       medium: 'Medium Priority',
       high: 'High Priority'
     }
+  },
+  configAndccesses : {
+    title: 'Configuration',
+    managmentAccess: 'Access Management',
+    managmentUsers: 'User Management',
+    managmentRoles: 'Role Management',
+    managmentPermissions : 'Permission Management',
+    managmentSettings: 'System Settings',
+    managmentEmail: 'Email Settings',
   },
 };

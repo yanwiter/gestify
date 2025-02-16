@@ -22,6 +22,7 @@ import Notifications from './pages/Notifications';
 import { ThemeProvider } from './context/ThemeContext';
 import { supabase } from './lib/supabaseClient';
 import './i18n';
+import AccessManagement from './pages/Configurations and accesses/AccessManagement';
 
 function LoadingSpinner() {
   return (
@@ -102,6 +103,11 @@ function App() {
             <Route path="/purchasing"></Route>
 
             <Route path="/revenue"></Route>
+
+            <Route path="/configurations">
+              <Route index element={<Navigate to="" replace />} />
+              <Route path="accessManagement" element={<AccessManagement />} />
+            </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

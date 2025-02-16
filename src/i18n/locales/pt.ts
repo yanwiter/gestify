@@ -8,6 +8,11 @@ export default {
   next: 'Próximo',
   page: 'Página',
   of: 'de',
+  name: 'Nome',
+  category: 'Categoria',
+  situation: 'Situação',
+  status: 'Status',
+
 
   common: {
     dashboard: 'Painel',
@@ -113,6 +118,8 @@ export default {
     filterSuppliers: 'Filtrar Fornecedores',
     removeAll: 'Remover Todos',
     includeAll: 'Incluir Todos',
+    situation: 'Situação',
+    mfaStatus: 'Status MFA',
   },
   production: {
     title: 'Ordens de Produção',
@@ -204,5 +211,15 @@ export default {
       medium: 'Média Prioridade',
       high: 'Alta Prioridade'
     }
+  },
+
+  configAndccesses : {
+    title: 'Configurações',
+    managmentAccess: 'Gestão de Acessos',
+    managmentUsers: 'Gestão de Usuários',
+    managmentRoles: 'Gestão de Funções',
+    managmentPermissions: 'Gestão de Permissões',
+    managmentSettings: 'Configurações do Sistema',
+    managmentEmail: 'Configurações de Email',
   },
 };

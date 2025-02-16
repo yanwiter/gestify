@@ -31,6 +31,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   const [isReportsExpanded, setIsReportsExpanded] = React.useState(false);
   const [isPurchasingExpanded, setIsPurchasingExpanded] = React.useState(false);
   const [isRevenueExpanded, setIsRevenueExpanded] = React.useState(false);
+  const [isConfigAndccessesExpanded, setIsConfigAndccessesExpanded] = React.useState(false);
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -335,18 +336,47 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
               )}
             </li>
 
-            <li>
-              <Link
-                to="/settings"
-                className={`flex items-center gap-2 p-2 rounded-lg ${
-                  isActive("/settings")
+            <li className="relative">
+              <button
+                onClick={() =>
+                  !isCollapsed &&
+                  setIsConfigAndccessesExpanded(!isConfigAndccessesExpanded)
+                }
+                className={`w-full flex items-center justify-between p-2 rounded-lg ${
+                  location.pathname.startsWith("/configurations")
                     ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
                     : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
                 }`}
               >
-                <Settings className="w-5 h-5" />
-                {!isCollapsed && <span>{t("common.settings")}</span>}
-              </Link>
+                <div className="flex items-center gap-2">
+                  <Settings className="w-5 h-5" />
+                  {!isCollapsed && <span>{t("configAndccesses.title")}</span>}
+                </div>
+                {!isCollapsed && (
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isConfigAndccessesExpanded ? "rotate-180" : ""
+                    }`}
+                  />
+                )}
+              </button>
+              {!isCollapsed && isConfigAndccessesExpanded && (
+                <ul className="mt-2 ml-6 space-y-2 transition-all duration-200">
+                  <li>
+                    <Link
+                      to="/configurations/accessManagement"
+                      className={`flex items-center gap-2 p-2 rounded-lg ${
+                        isActive("/accessManagement")
+                          ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
+                          : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      <span>{t("configAndccesses.managmentAccess")}</span>
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </li>
           </ul>
         </div>
