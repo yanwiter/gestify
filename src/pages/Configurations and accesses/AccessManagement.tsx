@@ -17,6 +17,8 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import Pagination from "../../components/Paginator/Paginator";
+import useVisibleColumns from "../../hooks/useVisibleColumns";
+
 
 interface VisibleColumns {
   name: boolean;
@@ -60,7 +62,11 @@ export default function AccessManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filteredSuppliers, setFilteredSuppliers] = useState(acessData);
   const totalPages = Math.ceil(filteredSuppliers.length / itemsPerPage);
-  const [visibleColumns, setVisibleColumns] = useState({
+  const {
+    visibleColumns,
+    toggleColumnVisibility,
+    toggleAllColumns,
+  } = useVisibleColumns({
     name: true,
     situation: true,
     email: true,
@@ -102,16 +108,6 @@ export default function AccessManagement() {
     setCurrentPage(1);
   };
 
-  const toggleColumnVisibility = (
-    column: keyof VisibleColumns,
-    value?: boolean
-  ) => {
-    setVisibleColumns((prev) => ({
-      ...prev,
-      [column]: value ?? !prev[column],
-    }));
-  };
-
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case "Ativo":
@@ -150,24 +146,16 @@ export default function AccessManagement() {
             >
               <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1">
-                  <MenuItem>
+                <MenuItem>
                     {({ focus }) => {
                       const allColumns = Object.keys(visibleColumns);
                       const allVisible = allColumns.every(
-                        (column) =>
-                          visibleColumns[column as keyof VisibleColumns]
+                        (column) => visibleColumns[column]
                       );
 
                       return (
                         <button
-                          onClick={() => {
-                            allColumns.forEach((column) => {
-                              toggleColumnVisibility(
-                                column as keyof VisibleColumns,
-                                !allVisible
-                              );
-                            });
-                          }}
+                          onClick={() => toggleAllColumns(!allVisible)}
                           className={`${
                             focus ? "bg-blue-500 text-white" : "text-gray-900"
                           } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
