@@ -24,6 +24,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { supabase } from './lib/supabaseClient';
 import './i18n';
 import AccessManagement from './pages/Configurations and accesses/AccessManagement';
+import { ToastContainer } from 'react-toastify';
 
 function LoadingSpinner() {
   return (
@@ -114,6 +115,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
+      <ToastContainer />
     </ThemeProvider>
   );
 }

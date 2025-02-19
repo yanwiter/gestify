@@ -19,6 +19,9 @@ export default function Products() {
       price: 4.99,
       stock: 1200,
       unit: 'units',
+      batchNumber: 'A123',
+      expirationDate: '2023-12-31',
+      manufacturingDate: '2023-01-01',
     },
     {
       id: '2',
@@ -27,6 +30,9 @@ export default function Products() {
       price: 6.99,
       stock: 500,
       unit: 'units',
+      batchNumber: 'B456',
+      expirationDate: '2023-12-31',
+      manufacturingDate: '2023-01-01',
     },
   ];
 
@@ -35,7 +41,7 @@ export default function Products() {
       setShowModal(true);
     };
   
-    const handleEditProduct = (product: any) => {
+    const handleEditProduct = (product: Product) => {
       setSelectedProduct(product);
       setShowModal(true);
     };
