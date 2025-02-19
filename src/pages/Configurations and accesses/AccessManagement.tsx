@@ -168,7 +168,7 @@ export default function AccessManagement() {
                         </button>
                       );
                     }}
-                  </MenuItem>
+                </MenuItem>
 
                   {/* Lista de colunas */}
                   {Object.keys(visibleColumns).map((column) => (

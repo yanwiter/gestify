@@ -17,6 +17,7 @@ import {
 } from "@headlessui/react";
 import { fetchAddressByCEP } from "../Utils/utils";
 import Pagination from "../components/Paginator/Paginator";
+import useVisibleColumns from "../hooks/useVisibleColumns";
 
 interface VisibleColumns {
   name: boolean;
@@ -37,7 +38,11 @@ export default function Suppliers() {
   const [typePerson, setTypePerson] = useState("");
   const [mask, setMask] = useState("");
 
-  const [visibleColumns, setVisibleColumns] = useState({
+  const {
+    visibleColumns,
+    toggleColumnVisibility,
+    toggleAllColumns,
+  } = useVisibleColumns({
     name: true,
     cnpj: true,
     email: true,
@@ -45,14 +50,13 @@ export default function Suppliers() {
     address: true,
     actions: true,
   });
-
   const [filters, setFilters] = useState({
     name: "",
     cnpj: "",
     email: "",
     phone: "",
   });
-
+  
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -308,16 +312,6 @@ export default function Suppliers() {
     handleCloseModal();
   };
 
-  const toggleColumnVisibility = (
-    column: keyof VisibleColumns,
-    value?: boolean
-  ) => {
-    setVisibleColumns((prev) => ({
-      ...prev,
-      [column]: value ?? !prev[column],
-    }));
-  };
-
   const handleCepBlur = async (cep: string) => {
     const address = await fetchAddressByCEP(cep.replace(/\D/g, ""));
     if (address) {
@@ -350,24 +344,16 @@ export default function Suppliers() {
             >
               <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1">
-                  <MenuItem>
+                <MenuItem>
                     {({ focus }) => {
                       const allColumns = Object.keys(visibleColumns);
                       const allVisible = allColumns.every(
-                        (column) =>
-                          visibleColumns[column as keyof VisibleColumns]
+                        (column) => visibleColumns[column]
                       );
 
                       return (
                         <button
-                          onClick={() => {
-                            allColumns.forEach((column) => {
-                              toggleColumnVisibility(
-                                column as keyof VisibleColumns,
-                                !allVisible
-                              );
-                            });
-                          }}
+                          onClick={() => toggleAllColumns(!allVisible)}
                           className={`${
                             focus ? "bg-blue-500 text-white" : "text-gray-900"
                           } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -380,7 +366,7 @@ export default function Suppliers() {
                         </button>
                       );
                     }}
-                  </MenuItem>
+                </MenuItem>
 
                   {/* Lista de colunas */}
                   {Object.keys(visibleColumns).map((column) => (
