@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Pencil, Trash2, X, ChevronDown, Filter } from "lucide-react";
+import { Plus, X, ChevronDown, Filter } from "lucide-react";
 import { SupplierModel } from "../Models/SupplierModel";
 import { IMaskInput } from "react-imask";
 import {
@@ -16,8 +16,8 @@ import {
   TabPanels,
 } from "@headlessui/react";
 import { fetchAddressByCEP } from "../Utils/utils";
-import Pagination from "../components/Paginator/Paginator";
 import useVisibleColumns from "../hooks/useVisibleColumns";
+import { GenericTable } from "../components/Table/GenericTable";
 
 interface VisibleColumns {
   name: boolean;
@@ -32,31 +32,26 @@ export default function Suppliers() {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] =
-    useState<SupplierModel | null>(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<SupplierModel | null>(null);
   const [email, setEmail] = useState("");
   const [typePerson, setTypePerson] = useState("");
   const [mask, setMask] = useState("");
-
-  const {
-    visibleColumns,
-    toggleColumnVisibility,
-    toggleAllColumns,
-  } = useVisibleColumns({
-    name: true,
-    cnpj: true,
-    email: true,
-    phone: true,
-    address: true,
-    actions: true,
-  });
+  const { visibleColumns, toggleColumnVisibility, toggleAllColumns } =
+    useVisibleColumns({
+      name: true,
+      cnpj: true,
+      email: true,
+      phone: true,
+      address: true,
+      actions: true,
+    });
   const [filters, setFilters] = useState({
     name: "",
     cnpj: "",
     email: "",
     phone: "",
   });
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -295,6 +290,10 @@ export default function Suppliers() {
     setShowModal(true);
   };
 
+  const handleDeleteSupplier = (supplier: unknown) => {
+    setSelectedSupplier(supplier as SupplierModel);
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedSupplier(null);
@@ -319,12 +318,23 @@ export default function Suppliers() {
     }
   };
 
+  const columns = [
+    { key: "name", label: "suppliers.name" },
+    { key: "cnpj", label: "suppliers.cnpj" },
+    { key: "email", label: "suppliers.email" },
+    { key: "phone", label: "suppliers.phone" },
+    { key: "address", label: "suppliers.address" },
+  ];
+
   return (
     <div className="space-y-6">
+      {/* Cabeçalho da página */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
           {t("suppliers.title")}
         </h1>
+
+        {/* Botões de ação */}
         <div className="flex gap-2">
           <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -344,7 +354,7 @@ export default function Suppliers() {
             >
               <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1">
-                <MenuItem>
+                  <MenuItem>
                     {({ focus }) => {
                       const allColumns = Object.keys(visibleColumns);
                       const allVisible = allColumns.every(
@@ -366,7 +376,7 @@ export default function Suppliers() {
                         </button>
                       );
                     }}
-                </MenuItem>
+                  </MenuItem>
 
                   {/* Lista de colunas */}
                   {Object.keys(visibleColumns).map((column) => (
@@ -412,81 +422,18 @@ export default function Suppliers() {
       </div>
 
       {/* Tabela de fornecedores */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b dark:border-gray-700">
-                {visibleColumns.name && (
-                  <th className="text-left p-4">{t("suppliers.name")}</th>
-                )}
-                {visibleColumns.cnpj && (
-                  <th className="text-left p-4">{t("suppliers.cnpj")}</th>
-                )}
-                {visibleColumns.email && (
-                  <th className="text-left p-4">{t("suppliers.email")}</th>
-                )}
-                {visibleColumns.phone && (
-                  <th className="text-left p-4">{t("suppliers.phone")}</th>
-                )}
-                {visibleColumns.address && (
-                  <th className="text-left p-4">{t("suppliers.address")}</th>
-                )}
-                {visibleColumns.actions && (
-                  <th className="text-left p-4">{t("products.actions")}</th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((supplier) => (
-                <tr key={supplier.id} className="border-b dark:border-gray-700">
-                  {visibleColumns.name && (
-                    <td className="p-4 dark:text-white">{supplier.name}</td>
-                  )}
-                  {visibleColumns.cnpj && (
-                    <td className="p-4 dark:text-white">{supplier.cnpj}</td>
-                  )}
-                  {visibleColumns.email && (
-                    <td className="p-4 dark:text-white">{supplier.email}</td>
-                  )}
-                  {visibleColumns.phone && (
-                    <td className="p-4 dark:text-white">{supplier.phone}</td>
-                  )}
-                  {visibleColumns.address && (
-                    <td className="p-4 dark:text-white">{supplier.address}</td>
-                  )}
-                  {visibleColumns.actions && (
-                    <td className="p-4">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEditSupplier(supplier)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Paginação */}
-      {Object.values(visibleColumns).some((column) => column) && (
-        <Pagination
+      <GenericTable
+        columns={columns}
+        data={currentItems}
+        visibleColumns={visibleColumns}
+        onEdit={handleEditSupplier}
+        onDelete={handleDeleteSupplier}
         currentPage={currentPage}
         totalPages={totalPages}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
-        onItemsPerPageChange={handleItemsPerPageChange}
+        onItemsPerPageChange={setItemsPerPage}
       />
-      )}
 
       {/* Modal de adicionar/editar fornecedor */}
       {showModal && (
@@ -651,7 +598,6 @@ export default function Suppliers() {
                               {t("hr.zipCode")} *
                             </label>
                             <IMaskInput
-
                               type="text"
                               required
                               onBlur={(e) => handleCepBlur(e.target.value)}
