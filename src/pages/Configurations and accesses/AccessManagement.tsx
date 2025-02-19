@@ -16,6 +16,7 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
+import Pagination from "../../components/Paginator/Paginator";
 
 interface VisibleColumns {
   name: boolean;
@@ -59,7 +60,6 @@ export default function AccessManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filteredSuppliers, setFilteredSuppliers] = useState(acessData);
   const totalPages = Math.ceil(filteredSuppliers.length / itemsPerPage);
-
   const [visibleColumns, setVisibleColumns] = useState({
     name: true,
     situation: true,
@@ -97,35 +97,9 @@ export default function AccessManagement() {
     setShowFilterModal(false);
   };
 
-  const nextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleItemsPerPageChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setItemsPerPage(Number(e.target.value));
+  const handleItemsPerPageChange = (itemsPerPage: number) => {
+    setItemsPerPage(itemsPerPage);
     setCurrentPage(1);
-  };
-
-  const firstPage = () => {
-    setCurrentPage(1);
-  };
-
-  const lastPage = () => {
-    setCurrentPage(totalPages);
-  };
-
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
   };
 
   const toggleColumnVisibility = (
@@ -251,7 +225,7 @@ export default function AccessManagement() {
         </div>
       </div>
 
-      {/* Tabela de fornecedores */}
+      {/* Tabela de pessoas */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -329,80 +303,13 @@ export default function AccessManagement() {
 
       {/* Paginação */}
       {Object.values(visibleColumns).some((column) => column) && (
-        <div className="flex justify-between items-center mt-4">
-          <div className="flex items-center gap-2">
-            <span className="text-gray-700 dark:text-gray-300">
-              {t("itemsPerPage")}
-            </span>
-            <select
-              value={itemsPerPage}
-              onChange={handleItemsPerPageChange}
-              className="border border-gray-300 rounded-md p-1"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
-          <div className="flex items-center gap-2">
-            {currentPage !== 1 && (
-              <button
-                onClick={firstPage}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                {t("first")}
-              </button>
-            )}
-            {currentPage > 1 && (
-              <button
-                onClick={prevPage}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                {t("previous")}
-              </button>
-            )}
-            {Array.from({ length: totalPages }, (_, index) => {
-              const page = index + 1;
-              const isCurrentPage = page === currentPage;
-              const isWithinRange = Math.abs(page - currentPage) <= 2;
-
-              if (isWithinRange || page === 1 || page === totalPages) {
-                return (
-                  <button
-                    key={page}
-                    onClick={() => goToPage(page)}
-                    disabled={isCurrentPage}
-                    className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium ${
-                      isCurrentPage
-                        ? "bg-blue-700 text-white"
-                        : "bg-blue-600 text-white hover:bg-blue-700"
-                    } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-                  >
-                    {page}
-                  </button>
-                );
-              }
-              return null;
-            })}
-            {currentPage < totalPages && (
-              <button
-                onClick={nextPage}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                {t("next")}
-              </button>
-            )}
-            {currentPage !== totalPages && (
-              <button
-                onClick={lastPage}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                {t("last")}
-              </button>
-            )}
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
+        />
       )}
     </div>
   );
