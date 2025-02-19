@@ -94,6 +94,19 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
             </li>
             <li>
               <Link
+                to="/customers"
+                className={`flex items-center gap-2 p-2 rounded-lg ${
+                  isActive("/customers")
+                    ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                }`}
+              >
+                <Truck className="w-5 h-5" />
+                {!isCollapsed && <span>{t("common.custumers")}</span>}
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/suppliers"
                 className={`flex items-center gap-2 p-2 rounded-lg ${
                   isActive("/suppliers")

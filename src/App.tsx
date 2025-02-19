@@ -18,6 +18,7 @@ import Payroll from './pages/HR/Payroll';
 import TimeTracking from './pages/HR/TimeTracking';
 import Training from './pages/HR/Training';
 import Notifications from './pages/Notifications';
+import Customers from './pages/Customers';
 
 import { ThemeProvider } from './context/ThemeContext';
 import { supabase } from './lib/supabaseClient';
@@ -88,6 +89,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path="/suppliers" element={<Suppliers />} />
+            <Route path="/customers" element={<Customers />} />
             <Route path="/production" element={<Production />} />
             <Route path="/quality" element={<Quality />} />
             <Route path="/notifications" element={<Notifications />} />

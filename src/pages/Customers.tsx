@@ -28,7 +28,7 @@ interface VisibleColumns {
   actions: boolean;
 }
 
-export default function Suppliers() {
+export default function Customers() {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -327,7 +327,7 @@ export default function Suppliers() {
       {/* Cabeçalho da página */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-          {t("suppliers.title")}
+          {t("customers.title")}
         </h1>
 
         {/* Botões de ação */}
@@ -335,7 +335,7 @@ export default function Suppliers() {
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <MenuButton className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
-                {t("suppliers.selectColumns")}
+                {t("customers.selectColumns")}
                 <ChevronDown className="w-4 h-4" />
               </MenuButton>
             </div>
@@ -366,8 +366,8 @@ export default function Suppliers() {
                         >
                           {t(
                             allVisible
-                              ? "suppliers.removeAll"
-                              : "suppliers.includeAll"
+                              ? "customers.removeAll"
+                              : "customers.includeAll"
                           )}
                         </button>
                       );
@@ -405,14 +405,14 @@ export default function Suppliers() {
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
             <Filter className="w-4 h-4" />
-            {t("suppliers.filter")}
+            {t("customers.filter")}
           </button>
           <button
             onClick={handleAddSupplier}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            {t("suppliers.addSupplier")}
+            {t("customers.addCustomer")}
           </button>
         </div>
       </div>
@@ -439,8 +439,8 @@ export default function Suppliers() {
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
                   {selectedSupplier
-                    ? t("suppliers.editSupplier")
-                    : t("suppliers.addSupplier")}
+                    ? t("customers.editSupplier")
+                    : t("customers.addSupplier")}
                 </h2>
                 <button
                   onClick={handleCloseModal}
@@ -932,8 +932,8 @@ export default function Suppliers() {
                     className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     {selectedSupplier
-                      ? t("suppliers.editSupplier")
-                      : t("suppliers.addSupplier")}
+                      ? t("customers.editSupplier")
+                      : t("customers.addSupplier")}
                   </button>
                 </div>
               </form>
@@ -949,7 +949,7 @@ export default function Suppliers() {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-                  {t("suppliers.filterSuppliers")}
+                  {t("customers.filter")}
                 </h2>
                 <button
                   onClick={() => setShowFilterModal(false)}

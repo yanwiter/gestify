@@ -27,7 +27,8 @@ export default {
     greeting: 'Olá',
     hr: 'Recursos Humanos',
     purchasing: 'Compras',
-    revenue: 'Faturamento'
+    revenue: 'Faturamento',
+    custumers: 'Clientes',
   },
   auth: {
     login: 'Entrar',
@@ -222,4 +223,28 @@ export default {
     managmentSettings: 'Configurações do Sistema',
     managmentEmail: 'Configurações de Email',
   },
+
+  customers: {
+    title: 'Gestão de Clientes',
+    addCustomer: 'Adicionar Cliente',
+    editCustomer: 'Editar Cliente',
+    name: 'Nome',
+    email: 'Email',
+    phone: 'Telefone',
+    address: 'Endereço',
+    street: 'Rua',
+    number: 'Número',
+    complement: 'Complemento',
+    neighborhood: 'Bairro',
+    city: 'Cidade',
+    state: 'Estado',
+    zipCode: 'CEP',
+    actions: 'Ações',
+    filter: 'Filtro',
+    filterCustomers: 'Filtrar Clientes',
+    removeAll: 'Remover Todos',
+    includeAll: 'Incluir Todos',
+    selectColumns: 'Selecionar colunas',
+  },
+
 };
