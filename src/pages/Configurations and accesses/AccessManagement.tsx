@@ -414,6 +414,19 @@ export default function AccessManagement() {
                               }`
                       }
                     >
+                      {t("configAndccesses.access")}
+                    </Tab>
+                    <Tab
+                      className={({ selected }) =>
+                        `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700
+                              ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2
+                              ${
+                                selected
+                                  ? "bg-white shadow"
+                                  : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                              }`
+                      }
+                    >
                       {t("configAndccesses.observations")}
                     </Tab>
                   </TabList>
@@ -483,8 +496,10 @@ export default function AccessManagement() {
                       )}
                     </TabPanel>
                     <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                      
+                    </TabPanel>
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       {/* Observations */}
-
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -511,6 +526,7 @@ export default function AccessManagement() {
                         </div>
                       </div>
                     </TabPanel>
+
                   </TabPanels>
                 </TabGroup>
 

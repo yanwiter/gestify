@@ -236,6 +236,7 @@ export default {
     active: 'Ativo',
     inactive: 'Inativo',
     blocked: 'Bloqueado',
+    access: 'Acessos e Perfis',
   },
 
   customers: {
