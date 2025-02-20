@@ -229,6 +229,11 @@ export default {
     observations: 'Observations',
     permissions: 'Permissions',
     name: 'Name',
+    situationAccess: 'Situation Access',
+    status: 'Status',
+    active: 'Active',
+    inactive: 'Inactive',
+    blocked: 'Blocked',
   },
 
   customers: {

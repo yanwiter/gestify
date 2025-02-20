@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import Dashboard from "../../pages/Dashboard";
+import "./PermissionManager.css";
+import { t } from "i18next";
 
 const modules = {
-
   Dasboard: {
     name: "Recursos Humanos",
     routines: {
       panel: "Painel",
     },
   },
-
   RH: {
     name: "Recursos Humanos",
     routines: {
       employeeManagement: "Gestão de Funcionários",
       payroll: "Folha de Pagamento",
+      training: "Treinamentos",
+      timeTracking: "Controle de Ponto",
     },
   },
   Finance: {
@@ -50,9 +51,9 @@ const PermissionManager: React.FC<PermissionManagerProps> = ({
 }) => {
   const [permissions, setPermissions] = useState(
     user.permissions || {
-        Dasboard: {
-            panel: { read: false, write: false, edit: false, delete: false },
-        },
+      Dasboard: {
+        panel: { read: false, write: false, edit: false, delete: false },
+      },
       RH: {
         employeeManagement: {
           read: false,
@@ -61,6 +62,13 @@ const PermissionManager: React.FC<PermissionManagerProps> = ({
           delete: false,
         },
         payroll: { read: false, write: false, edit: false, delete: false },
+        training: { read: false, write: false, edit: false, delete: false },
+        timeTracking: {
+          read: false,
+          write: false,
+          edit: false,
+          delete: false,
+        },
       },
       Finance: {
         billing: { read: false, write: false, edit: false, delete: false },
@@ -105,7 +113,7 @@ const PermissionManager: React.FC<PermissionManagerProps> = ({
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               {module.name}
             </h3>
-            <div className="mt-2 space-y-4">
+            <div className="mt-2 routine-grid">
               {Object.entries(module.routines).map(
                 ([routineKey, routineName]) => {
                   const routinePermissions =

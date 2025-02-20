@@ -44,12 +44,22 @@ const accesses = [
     updatedAt: "2021-10-10",
     permissions: {
       RH: {
-        employeeManagement: { read: true, write: true, edit: true, delete: true },
+        employeeManagement: {
+          read: true,
+          write: true,
+          edit: true,
+          delete: true,
+        },
         payroll: { read: true, write: false, edit: false, delete: false },
       },
       Finance: {
         billing: { read: true, write: true, edit: true, delete: false },
-        accountsPayable: { read: true, write: false, edit: false, delete: false },
+        accountsPayable: {
+          read: true,
+          write: false,
+          edit: false,
+          delete: false,
+        },
       },
     },
   },
@@ -67,12 +77,22 @@ const accesses = [
     updatedAt: "2021-10-10",
     permissions: {
       RH: {
-        employeeManagement: { read: true, write: true, edit: true, delete: true },
+        employeeManagement: {
+          read: true,
+          write: true,
+          edit: true,
+          delete: true,
+        },
         payroll: { read: true, write: false, edit: false, delete: false },
       },
       Finance: {
         billing: { read: true, write: true, edit: true, delete: false },
-        accountsPayable: { read: true, write: false, edit: false, delete: false },
+        accountsPayable: {
+          read: true,
+          write: false,
+          edit: false,
+          delete: false,
+        },
       },
     },
   },
@@ -90,12 +110,22 @@ const accesses = [
     updatedAt: "2021-10-10",
     permissions: {
       RH: {
-        employeeManagement: { read: true, write: true, edit: true, delete: true },
+        employeeManagement: {
+          read: true,
+          write: true,
+          edit: true,
+          delete: true,
+        },
         payroll: { read: true, write: false, edit: false, delete: false },
       },
       Finance: {
         billing: { read: true, write: true, edit: true, delete: false },
-        accountsPayable: { read: true, write: false, edit: false, delete: false },
+        accountsPayable: {
+          read: true,
+          write: false,
+          edit: false,
+          delete: false,
+        },
       },
     },
   },
@@ -215,6 +245,7 @@ export default function AccessManagement() {
     { key: "situation", label: "category" },
     { key: "phone", label: "suppliers.phone" },
     { key: "mfaStatus", label: "suppliers.mfaStatus" },
+    { key: "permissions", label: "configAndccesses.permissions" },
   ];
 
   return (
@@ -437,22 +468,48 @@ export default function AccessManagement() {
                         <PermissionManager
                           user={selectedPerson}
                           onSave={(updatedPermissions) => {
-                              setSelectedPerson((prev) => {
-                                if (!prev) return prev;
-                                return {
-                                  ...prev,
-                                  permissions: {
-                                    ...prev.permissions,
-                                    ...updatedPermissions,
-                                  } as UserPermissions,
-                                };
-                              });
+                            setSelectedPerson((prev) => {
+                              if (!prev) return prev;
+                              return {
+                                ...prev,
+                                permissions: {
+                                  ...prev.permissions,
+                                  ...updatedPermissions,
+                                } as UserPermissions,
+                              };
+                            });
                           }}
                         />
                       )}
                     </TabPanel>
                     <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       {/* Observations */}
+
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("configAndccesses.situationAccess")} *
+                            </label>
+                            <div className="mt-1 relative">
+                              <select
+                                required
+                                className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                              >
+                                <option value="active">
+                                  {t("configAndccesses.active")}
+                                </option>
+                                <option value="inactive">
+                                  {t("configAndccesses.inactive")}
+                                </option>
+                                <option value="blocked">
+                                  {t("configAndccesses.blocked")}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </TabPanel>
                   </TabPanels>
                 </TabGroup>
