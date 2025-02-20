@@ -1,12 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  X,
-  ChevronDown,
-  Filter,
-  EyeOff,
-  Eye,
-} from "lucide-react";
+import { X, ChevronDown, Filter, EyeOff, Eye } from "lucide-react";
 import {
   Menu,
   Transition,
@@ -23,6 +17,8 @@ import useVisibleColumns from "../../hooks/useVisibleColumns";
 import { AccessModel } from "../../Models/AccessModel";
 import { toast } from "react-toastify";
 import { GenericTable } from "../../components/Table/GenericTable";
+import PermissionManager from "../../components/Permissions/PermissionManager";
+import { UserPermissions } from "../../Models/Permission";
 
 interface VisibleColumns {
   name: boolean;
@@ -46,6 +42,16 @@ const accesses = [
     status: "active",
     createdAt: "2021-10-10",
     updatedAt: "2021-10-10",
+    permissions: {
+      RH: {
+        employeeManagement: { read: true, write: true, edit: true, delete: true },
+        payroll: { read: true, write: false, edit: false, delete: false },
+      },
+      Finance: {
+        billing: { read: true, write: true, edit: true, delete: false },
+        accountsPayable: { read: true, write: false, edit: false, delete: false },
+      },
+    },
   },
   {
     id: "2",
@@ -59,6 +65,16 @@ const accesses = [
     status: "inactive",
     createdAt: "2021-10-10",
     updatedAt: "2021-10-10",
+    permissions: {
+      RH: {
+        employeeManagement: { read: true, write: true, edit: true, delete: true },
+        payroll: { read: true, write: false, edit: false, delete: false },
+      },
+      Finance: {
+        billing: { read: true, write: true, edit: true, delete: false },
+        accountsPayable: { read: true, write: false, edit: false, delete: false },
+      },
+    },
   },
   {
     id: "3",
@@ -72,6 +88,16 @@ const accesses = [
     status: "on_leave",
     createdAt: "2021-10-10",
     updatedAt: "2021-10-10",
+    permissions: {
+      RH: {
+        employeeManagement: { read: true, write: true, edit: true, delete: true },
+        payroll: { read: true, write: false, edit: false, delete: false },
+      },
+      Finance: {
+        billing: { read: true, write: true, edit: true, delete: false },
+        accountsPayable: { read: true, write: false, edit: false, delete: false },
+      },
+    },
   },
 ];
 
@@ -285,7 +311,7 @@ export default function AccessManagement() {
 
       <GenericTable
         columns={columns}
-        data={currentItems}
+        data={currentItems.map(({ permissions, ...rest }) => rest)}
         visibleColumns={visibleColumns}
         onEdit={handleEditAccess}
         onDelete={handleDeleteAccess}
@@ -406,7 +432,25 @@ export default function AccessManagement() {
                         </div>
                       </div>
                     </TabPanel>
-                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800"></TabPanel>
+                    <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
+                      {selectedPerson && (
+                        <PermissionManager
+                          user={selectedPerson}
+                          onSave={(updatedPermissions) => {
+                              setSelectedPerson((prev) => {
+                                if (!prev) return prev;
+                                return {
+                                  ...prev,
+                                  permissions: {
+                                    ...prev.permissions,
+                                    ...updatedPermissions,
+                                  } as UserPermissions,
+                                };
+                              });
+                          }}
+                        />
+                      )}
+                    </TabPanel>
                     <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       {/* Observations */}
                     </TabPanel>

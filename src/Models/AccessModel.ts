@@ -1,3 +1,5 @@
+import { UserPermissions } from "./Permission";
+
 export interface AccessModel {
   id: string;
   name: string;
@@ -7,4 +9,5 @@ export interface AccessModel {
   status: string;
   createdAt: string;
   updatedAt: string;
+  permissions: UserPermissions;
 }
