@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, RefreshCcwDot, Trash2 } from "lucide-react";
 import Pagination from "../Paginator/Paginator";
 
 interface Column {
@@ -84,6 +84,10 @@ export const GenericTable: React.FC<GenericTableProps> = ({
                           className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg"
                         >
                           <Trash2 className="w-4 h-4" />
+                        </button>
+
+                        <button  className="p-2 text-green-500 hover:bg-green-50 dark:hover:bg-green-900 rounded-lg">
+                          <RefreshCcwDot className="w-4 h-4" />
                         </button>
                       </div>
                     </td>

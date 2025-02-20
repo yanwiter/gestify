@@ -120,7 +120,7 @@ export default {
     removeAll: 'Remover Todos',
     includeAll: 'Incluir Todos',
     situation: 'Situação',
-    mfaStatus: 'Status MFA',
+    mfaStatus: 'MFA',
   },
   production: {
     title: 'Ordens de Produção',
@@ -222,6 +222,15 @@ export default {
     managmentPermissions: 'Gestão de Permissões',
     managmentSettings: 'Configurações do Sistema',
     managmentEmail: 'Configurações de Email',
+    accessInfo: 'Informações de Acesso',
+    email: 'Email',
+    password: 'Senha',
+    editAccess: 'Editar Acesso',
+    editUser: 'Editar Usuário',
+    editRole: 'Editar Função',
+    observations: 'Observações',
+    permissions: 'Permissões',
+    name: 'Nome',
   },
 
   customers: {

@@ -119,7 +119,7 @@ export default {
     removeAll: 'Remove All',
     includeAll: 'Include All',
     situation: 'Situation',
-    mfaStatus: 'MFA Status',
+    mfaStatus: 'MFA',
   },
   production: {
     title: 'Production Orders',
@@ -220,6 +220,15 @@ export default {
     managmentPermissions : 'Permission Management',
     managmentSettings: 'System Settings',
     managmentEmail: 'Email Settings',
+    accessInfo: 'Access Information',
+    email: 'Email',
+    password: 'Password',
+    editAccess: 'Edit Access',
+    editUser: 'Edit User',
+    editRole: 'Edit Role',
+    observations: 'Observations',
+    permissions: 'Permissions',
+    name: 'Name',
   },
 
   customers: {
@@ -244,5 +253,6 @@ export default {
     removeAll: 'Remove All',
     includeAll: 'Include All',
     selectColumns: 'Select columns',
+
   },
 };
