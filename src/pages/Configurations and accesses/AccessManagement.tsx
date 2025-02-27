@@ -262,16 +262,20 @@ export default function AccessManagement() {
     { key: "permissions", label: "configAndccesses.permissions" },
     { key: "companies", label: "configAndccesses.companies" },
   ];
-  const formatPermissions = (permissions: Record<string, Record<string, boolean>>) => {
+  const formatPermissions = (
+    permissions: Record<string, Record<string, boolean>>
+  ) => {
     return Object.entries(permissions)
       .map(([category, actions]) => {
         const enabledActions = Object.entries(actions)
           .filter(([action, value]) => value)
           .map(([action]) => action);
-        return enabledActions.length > 0 ? `${category}: ${enabledActions.join(', ')}` : null;
+        return enabledActions.length > 0
+          ? `${category}: ${enabledActions.join(", ")}`
+          : null;
       })
       .filter(Boolean)
-      .join(', ');
+      .join(", ");
   };
 
   return (
@@ -367,21 +371,23 @@ export default function AccessManagement() {
       </div>
 
       <GenericTable
-  columns={columns}
-  data={currentItems.map(({ permissions, companies, ...rest }) => ({
-    ...rest,
-    companies: (companies ?? []).map((company) => company.name).join(", "),
-    permissions: formatPermissions(permissions), // Formatando as permissões
-  }))}
-  visibleColumns={visibleColumns}
-  onEdit={handleEditAccess}
-  onDelete={handleDeleteAccess}
-  currentPage={currentPage}
-  totalPages={totalPages}
-  itemsPerPage={itemsPerPage}
-  onPageChange={setCurrentPage}
-  onItemsPerPageChange={setItemsPerPage}
-/>
+        columns={columns}
+        data={currentItems.map(({ permissions, companies, ...rest }) => ({
+          ...rest,
+          companies: (companies ?? [])
+            .map((company) => company.name)
+            .join(", "),
+          permissions: formatPermissions(permissions), // Formatando as permissões
+        }))}
+        visibleColumns={visibleColumns}
+        onEdit={handleEditAccess}
+        onDelete={handleDeleteAccess}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        onItemsPerPageChange={setItemsPerPage}
+      />
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
