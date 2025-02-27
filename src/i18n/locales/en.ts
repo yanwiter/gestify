@@ -235,6 +235,7 @@ export default {
     inactive: 'Inactive',
     blocked: 'Blocked',
     access: 'Access and profiles',
+    companies: 'Companies',
   },
 
   customers: {

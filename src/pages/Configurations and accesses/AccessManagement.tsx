@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { GenericTable } from "../../components/Table/GenericTable";
 import PermissionManager from "../../components/Permissions/PermissionManager";
 import { UserPermissions } from "../../Models/Permission";
+import { Company } from "../../Models/Company";
 
 interface VisibleColumns {
   name: boolean;
@@ -26,6 +27,8 @@ interface VisibleColumns {
   email: boolean;
   phone: boolean;
   mfaStatus: boolean;
+  permissions: boolean;
+  companies: boolean;
   actions: boolean;
 }
 
@@ -42,6 +45,7 @@ const accesses = [
     status: "active",
     createdAt: "2021-10-10",
     updatedAt: "2021-10-10",
+    companies: [{ id: "1", name: "Empresa A" }],
     permissions: {
       RH: {
         employeeManagement: {
@@ -75,6 +79,7 @@ const accesses = [
     status: "inactive",
     createdAt: "2021-10-10",
     updatedAt: "2021-10-10",
+    companies: [{ id: "2", name: "Empresa B" }],
     permissions: {
       RH: {
         employeeManagement: {
@@ -108,6 +113,7 @@ const accesses = [
     status: "on_leave",
     createdAt: "2021-10-10",
     updatedAt: "2021-10-10",
+    companies: [{ id: "3", name: "Empresa C" }],
     permissions: {
       RH: {
         employeeManagement: {
@@ -150,6 +156,8 @@ export default function AccessManagement() {
       email: true,
       phone: true,
       mfaStatus: true,
+      permissions: true,
+      companies: true,
       actions: true,
     });
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -185,6 +193,12 @@ export default function AccessManagement() {
     setItemsPerPage(itemsPerPage);
     setCurrentPage(1);
   };
+
+  const [companies, setCompanies] = useState<Company[]>([
+    { id: "1", name: "Empresa A" },
+    { id: "2", name: "Empresa B" },
+    { id: "3", name: "Empresa C" },
+  ]);
 
   const handleAddAccess = () => {
     setSelectedPerson(null);
@@ -246,7 +260,19 @@ export default function AccessManagement() {
     { key: "phone", label: "suppliers.phone" },
     { key: "mfaStatus", label: "suppliers.mfaStatus" },
     { key: "permissions", label: "configAndccesses.permissions" },
+    { key: "companies", label: "configAndccesses.companies" },
   ];
+  const formatPermissions = (permissions: Record<string, Record<string, boolean>>) => {
+    return Object.entries(permissions)
+      .map(([category, actions]) => {
+        const enabledActions = Object.entries(actions)
+          .filter(([action, value]) => value)
+          .map(([action]) => action);
+        return enabledActions.length > 0 ? `${category}: ${enabledActions.join(', ')}` : null;
+      })
+      .filter(Boolean)
+      .join(', ');
+  };
 
   return (
     <div className="space-y-6">
@@ -341,17 +367,21 @@ export default function AccessManagement() {
       </div>
 
       <GenericTable
-        columns={columns}
-        data={currentItems.map(({ permissions, ...rest }) => rest)}
-        visibleColumns={visibleColumns}
-        onEdit={handleEditAccess}
-        onDelete={handleDeleteAccess}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        itemsPerPage={itemsPerPage}
-        onPageChange={setCurrentPage}
-        onItemsPerPageChange={setItemsPerPage}
-      />
+  columns={columns}
+  data={currentItems.map(({ permissions, companies, ...rest }) => ({
+    ...rest,
+    companies: (companies ?? []).map((company) => company.name).join(", "),
+    permissions: formatPermissions(permissions), // Formatando as permissões
+  }))}
+  visibleColumns={visibleColumns}
+  onEdit={handleEditAccess}
+  onDelete={handleDeleteAccess}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  itemsPerPage={itemsPerPage}
+  onPageChange={setCurrentPage}
+  onItemsPerPageChange={setItemsPerPage}
+/>
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -496,7 +526,39 @@ export default function AccessManagement() {
                       )}
                     </TabPanel>
                     <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
-                      
+                      {/* Access Information */}
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              {t("configAndccesses.selectCompanies")} *
+                            </label>
+                            <div className="mt-1 relative">
+                              <select
+                                multiple
+                                value={selectedPerson?.selectedCompanies || []}
+                                onChange={(e) => {
+                                  const selectedOptions = Array.from(
+                                    e.target.selectedOptions,
+                                    (option) => option.value
+                                  );
+                                  setSelectedPerson((prev) => ({
+                                    ...prev!,
+                                    selectedCompanies: selectedOptions,
+                                  }));
+                                }}
+                                className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                              >
+                                {companies.map((company) => (
+                                  <option key={company.id} value={company.id}>
+                                    {company.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </TabPanel>
                     <TabPanel className="rounded-xl p-3 focus:outline-none bg-white dark:bg-gray-800">
                       {/* Observations */}
@@ -526,7 +588,6 @@ export default function AccessManagement() {
                         </div>
                       </div>
                     </TabPanel>
-
                   </TabPanels>
                 </TabGroup>
 

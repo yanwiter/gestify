@@ -237,6 +237,7 @@ export default {
     inactive: 'Inativo',
     blocked: 'Bloqueado',
     access: 'Acessos e Perfis',
+    companies: 'Empresas',
   },
 
   customers: {
